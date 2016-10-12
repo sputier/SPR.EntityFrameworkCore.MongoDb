@@ -2,13 +2,14 @@
 {
     public class Customer
     {
-        public int Id { get; set; }
+        public ObjectId Id { get; set; }
 
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
 
-        public Address Address { get; set; }
+        //Cette propriété est génératrice d'exception : Address n'a pas de clé primaire...
+        //public Address Address { get; set; }
 
         public string PhoneNumber { get; set; }
     }

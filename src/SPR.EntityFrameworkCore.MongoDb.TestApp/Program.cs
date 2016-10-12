@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace SPR.EntityFrameworkCore.MongoDb.TestApp
 {
@@ -13,20 +14,23 @@ namespace SPR.EntityFrameworkCore.MongoDb.TestApp
             {
                 using (var context = new DummyDbContext())
                 {
+                    var conventionSetBuilder = context.GetService<Microsoft.EntityFrameworkCore.Metadata.Conventions.Internal.ICoreConventionSetBuilder>();
+                    Console.WriteLine("ICoreConventionSetBuilder : " + conventionSetBuilder.GetType().FullName);
+
                     Console.WriteLine("DummyDbContext created");
 
                     var entity = new Customer()
                     {
                         FirstName = "Sebastien",
                         LastName = "Putier",
-                        Address = new Address
-                        {
-                            Address1 = "1ere ligne d'adresse",
-                            Address2 = "2eme ligne d'adresse",
-                            ZipCode = "01023",
-                            City = "Une ville",
-                            Country = "France"
-                        },
+                        //Address = new Address
+                        //{
+                        //    Address1 = "1ere ligne d'adresse",
+                        //    Address2 = "2eme ligne d'adresse",
+                        //    ZipCode = "01023",
+                        //    City = "Une ville",
+                        //    Country = "France"
+                        //},
                         PhoneNumber = "0601020304"
                     };
 

@@ -2,32 +2,28 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.EntityFrameworkCore.Update;
-using Remotion.Linq;
 using System.Threading;
+using JetBrains.Annotations;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace SPR.EntityFrameworkCore.MongoDb.Storage
 {
-    public class MongoDbDatabase : IDatabase
+    public class MongoDbDatabase : Database
     {
-        public Func<QueryContext, IAsyncEnumerable<TResult>> CompileAsyncQuery<TResult>(QueryModel queryModel)
+        public MongoDbDatabase([NotNull] IQueryCompilationContextFactory queryCompilationContextFactory) 
+            : base(queryCompilationContextFactory)
+        {
+        }
+
+        public override int SaveChanges(IReadOnlyList<IUpdateEntry> entries)
         {
             throw new NotImplementedException();
         }
 
-        public Func<QueryContext, IEnumerable<TResult>> CompileQuery<TResult>(QueryModel queryModel)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int SaveChanges(IReadOnlyList<IUpdateEntry> entries)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> SaveChangesAsync(IReadOnlyList<IUpdateEntry> entries, CancellationToken cancellationToken = default(CancellationToken))
+        public override Task<int> SaveChangesAsync(IReadOnlyList<IUpdateEntry> entries, CancellationToken cancellationToken = default(CancellationToken))
         {
             throw new NotImplementedException();
         }

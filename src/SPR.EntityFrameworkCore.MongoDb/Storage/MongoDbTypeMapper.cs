@@ -12,6 +12,88 @@ namespace SPR.EntityFrameworkCore.MongoDb.Storage
 {
     public class MongoDbTypeMapper : IMongoDbTypeMapper
     {
+        private readonly MongoDbTypeMapping _double
+               = new MongoDbTypeMapping("double", typeof(double));
+
+        private readonly MongoDbTypeMapping _string
+            = new MongoDbTypeMapping("string", typeof(string));
+
+        private readonly MongoDbTypeMapping _object
+            = new MongoDbTypeMapping("object", typeof(object));
+
+        private readonly MongoDbTypeMapping _binaryData
+            = new MongoDbTypeMapping("binData", typeof(byte[]));
+
+        private readonly MongoDbTypeMapping _objectId
+            = new MongoDbTypeMapping("objectId", typeof(ObjectId));
+
+        private readonly MongoDbTypeMapping _boolean
+            = new MongoDbTypeMapping("bool", typeof(bool));
+
+        private readonly MongoDbTypeMapping _date
+            = new MongoDbTypeMapping("date", typeof(DateTime));
+
+        private readonly MongoDbTypeMapping _int32
+            = new MongoDbTypeMapping("int", typeof(int));
+
+        private readonly MongoDbTypeMapping _int64
+            = new MongoDbTypeMapping("long", typeof(long));
+
+        private readonly Dictionary<string, MongoDbTypeMapping> _storeTypeMappings;
+        private readonly Dictionary<Type, MongoDbTypeMapping> _clrTypeMappings;
+        private readonly HashSet<string> _disallowedMappings;
+
+        /// <summary>
+        ///     This API supports the Entity Framework Core infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
+        public MongoDbTypeMapper()
+        {
+            _storeTypeMappings
+                = new Dictionary<string, MongoDbTypeMapping>(StringComparer.OrdinalIgnoreCase)
+                {
+                    { "double", _double },
+                    { "string", _string },
+                    { "object", _object },
+                    { "binData", _binaryData },
+                    { "objectId", _objectId },
+                    { "date", _date },
+                    { "int", _int32 },
+                    { "long", _int64 }
+                };
+
+            _clrTypeMappings
+                = new Dictionary<Type, MongoDbTypeMapping>
+                {
+                     { typeof(double), _double },
+                    { typeof(string), _string },
+                    { typeof(object), _object },
+                    { typeof(byte[]), _binaryData },
+                    { typeof(ObjectId), _objectId },
+                    { typeof(bool), _boolean },
+                    { typeof(DateTime), _date },
+                    { typeof(int), _int32 },
+                    { typeof(long), _int64 }
+                };
+
+            // These are disallowed only if specified without any kind of length specified in parenthesis.
+            // This is because we don't try to make a new type from this string and any max length value
+            // specified in the model, which means use of these strings is almost certainly an error, and
+            // if it is not an error, then using, for example, varbinary(1) will work instead.
+            _disallowedMappings
+                = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+                {
+                    "array",
+                    "null",
+                    "regex",
+                    "javascript",
+                    "javascriptWithScope",
+                    "timestamp",
+                    "minKey",
+                    "maxKey"
+                };
+        }
+
         public MongoDbTypeMapping FindMapping([NotNull] string storeType)
         {
             throw new NotImplementedException();
@@ -19,7 +101,12 @@ namespace SPR.EntityFrameworkCore.MongoDb.Storage
 
         public MongoDbTypeMapping FindMapping([NotNull] Type clrType)
         {
-            throw new NotImplementedException();
+            Check.NotNull(clrType, nameof(clrType));
+
+            clrType = clrType.UnwrapNullableType().UnwrapEnumType();
+
+            MongoDbTypeMapping mapping;
+            return _clrTypeMappings.TryGetValue(clrType, out mapping) ? mapping : null;
         }
 
         public MongoDbTypeMapping FindMapping([NotNull] IProperty property)
@@ -29,12 +116,15 @@ namespace SPR.EntityFrameworkCore.MongoDb.Storage
 
         public void ValidateTypeName([NotNull] string storeType)
         {
-            throw new NotImplementedException();
+            if (_disallowedMappings.Contains(storeType))
+            {
+                throw new ArgumentException($"Data type '{storeType}' is not supported");
+            }
         }
 
 
         /// <summary>
-        ///     Gets the relational database type for a given object, throwing if no mapping is found.
+        ///     Gets the database type for a given object, throwing if no mapping is found.
         /// </summary>
         /// <param name="value"> The object to get the mapping for. </param>
         /// <returns> The type mapping to be used. </returns>

@@ -107,6 +107,7 @@
     <Compile Include="Infrastructure\MongoDbModelSource.cs" />
     <Compile Include="Infrastructure\MongoDbServiceCollectionExtensions.cs" />
     <Compile Include="Metadata\Conventions\Internal\MongoDbPropertyDiscoveryConvention.cs" />
+    <Compile Include="Metadata\Conventions\Internal\MongoDbPropertyMappingValidationConvention.cs" />
     <Compile Include="Metadata\Conventions\MongoDbConventionSetBuilder.cs" />
     <Compile Include="ObjectId.cs" />
     <Compile Include="Query\ExpressionVisitors\MongoDbEntityQueryableExpressionVisitorFactory.cs" />

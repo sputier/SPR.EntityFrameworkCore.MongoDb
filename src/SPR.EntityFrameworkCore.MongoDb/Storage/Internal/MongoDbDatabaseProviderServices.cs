@@ -14,6 +14,8 @@ using SPR.EntityFrameworkCore.MongoDb.Infrastructure;
 using System.Reflection;
 using SPR.EntityFrameworkCore.MongoDb.Query;
 using SPR.EntityFrameworkCore.MongoDb.ValueGeneration;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions.Internal;
+using SPR.EntityFrameworkCore.MongoDb.Metadata.Conventions;
 
 namespace SPR.EntityFrameworkCore.MongoDb.Storage.Internal
 {
@@ -41,5 +43,7 @@ namespace SPR.EntityFrameworkCore.MongoDb.Storage.Internal
         public override IDbContextTransactionManager TransactionManager => GetService<MongoDbContextTransactionManager>();
 
         public override IValueGeneratorCache ValueGeneratorCache => GetService<MongoDbValueGeneratorCache>();
+
+        public override IConventionSetBuilder ConventionSetBuilder => GetService<MongoDbConventionSetBuilder>();
     }
 }

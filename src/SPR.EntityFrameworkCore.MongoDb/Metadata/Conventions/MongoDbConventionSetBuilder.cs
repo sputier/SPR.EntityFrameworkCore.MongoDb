@@ -26,6 +26,27 @@ namespace SPR.EntityFrameworkCore.MongoDb.Metadata.Conventions
 
             ReplaceConvention(conventionSet.EntityTypeAddedConventions, (PropertyDiscoveryConvention)propertyDiscoveryConvention);
 
+            //conventionSet.EntityTypeAddedConventions.Add(inversePropertyAttributeConvention);
+            //conventionSet.EntityTypeAddedConventions.Add(relationshipDiscoveryConvention);
+            RemoveConvention<IEntityTypeConvention, InversePropertyAttributeConvention>(conventionSet.EntityTypeAddedConventions);
+            RemoveConvention<IEntityTypeConvention, RelationshipDiscoveryConvention>(conventionSet.EntityTypeAddedConventions);
+
+            //conventionSet.BaseEntityTypeSetConventions.Add(relationshipDiscoveryConvention);
+            RemoveConvention<IBaseTypeConvention, RelationshipDiscoveryConvention>(conventionSet.BaseEntityTypeSetConventions);
+
+            //conventionSet.EntityTypeMemberIgnoredConventions.Add(relationshipDiscoveryConvention);
+            RemoveConvention<IEntityTypeMemberIgnoredConvention, RelationshipDiscoveryConvention>(conventionSet.EntityTypeMemberIgnoredConventions);
+
+            //conventionSet.NavigationAddedConventions.Add(relationshipDiscoveryConvention);
+            RemoveConvention<INavigationConvention, RelationshipDiscoveryConvention>(conventionSet.NavigationAddedConventions);
+
+            //conventionSet.NavigationRemovedConventions.Add(relationshipDiscoveryConvention);
+            RemoveConvention<INavigationRemovedConvention, RelationshipDiscoveryConvention>(conventionSet.NavigationRemovedConventions);
+
+            //conventionSet.ModelBuiltConventions.Add(new PropertyMappingValidationConvention());
+            ReplaceConvention(conventionSet.ModelBuiltConventions, (PropertyMappingValidationConvention)new MongoDbPropertyMappingValidationConvention(_typeMapper));
+
+
             return conventionSet;
         }
 
@@ -44,6 +65,18 @@ namespace SPR.EntityFrameworkCore.MongoDb.Metadata.Conventions
             var index = conventionsList.IndexOf(oldConvention);
             conventionsList.RemoveAt(index);
             conventionsList.Insert(index, newConvention);
+        }
+
+        protected virtual void RemoveConvention<T1, T2>([NotNull] IList<T1> conventionsList)
+           where T2 : T1
+        {
+            var oldConvention = conventionsList.OfType<T2>().FirstOrDefault();
+            if (oldConvention == null)
+            {
+                return;
+            }
+            var index = conventionsList.IndexOf(oldConvention);
+            conventionsList.RemoveAt(index);
         }
     }
 }

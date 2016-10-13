@@ -57,12 +57,20 @@ namespace Microsoft.EntityFrameworkCore.Infrastructure
             services.TryAddEnumerable(ServiceDescriptor
                 .Singleton<IDatabaseProvider, DatabaseProvider<MongoDbDatabaseProviderServices, MongoDbOptionsExtension>>());
 
+            services.Replace(ServiceDescriptor
+                .Scoped<Metadata.Conventions.Internal.IConventionSetBuilder>(i => new MongoDbConventionSetBuilder(new MongoDbTypeMapper())));
+
+            //var s = services.First(desc => desc.ServiceType == typeof(Metadata.Conventions.Internal.IConventionSetBuilder));
+            //services.Remove(s);
+            //services.Add(ServiceDescriptor.Scoped<Metadata.Conventions.Internal.IConventionSetBuilder, MongoDbConventionSetBuilder>());
+
             services.TryAdd(new ServiceCollection()
                 .AddSingleton<MongoDbValueGeneratorCache>()
                 .AddSingleton<MongoDbModelSource>()
                 .AddScoped<MongoDbConventionSetBuilder>()
                 .AddScoped<MongoDbDatabaseProviderServices>()
                 .AddScoped<MongoDbDatabase>()
+                .AddScoped<IMongoDbTypeMapper, MongoDbTypeMapper>()
                 .AddQuery()
             );
 

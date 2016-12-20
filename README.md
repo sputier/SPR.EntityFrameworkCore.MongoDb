@@ -7,6 +7,8 @@ On the other hand, if anyone want to provide help, I'd be glad to receive it.
 
 ###### Current status
 
+[![Build status](https://ci.appveyor.com/api/projects/status/jrcxkt8g43j278ho?svg=true)](https://ci.appveyor.com/project/sputier/spr-entityframeworkcore-mongodb)
+
 At the moment, the provider can handle very simple Find queries, without any filter or projection. In the SQL world, we'd say it can handle SELECT * FROM table queries. 
 
 The test application execute 2 Find queries and display their results in the console. 

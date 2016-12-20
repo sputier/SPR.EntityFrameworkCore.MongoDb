@@ -5,6 +5,48 @@ As of the writing of these lines, everything you could find here is a **really e
 
 On the other hand, if anyone want to provide help, I'd be glad to receive it. 
 
+###### Current status
+
+At the moment, the provider can handle very simple Find queries, without any filter or projection. In the SQL world, we'd say it can handle SELECT * FROM table queries. 
+
+The test application execute 2 Find queries and display their results in the console. 
+
+The sample database used to test the provider contains 2 collections : 
+
+**Customer** :
+One document described below.
+~~~~
+{
+    "_id": {
+        "$oid": "583407e7f36d28568d3171eb"
+    },
+    "FirstName": "Jean",
+    "LastName": "Dupont",
+    "PhoneNumber": "0102030405"
+}
+~~~~
+
+**City** :
+29353 documents built from http://media.mongodb.org/zips.json 
+
+The first one is described below : 
+~~~~
+{
+    "_id": {
+        "$oid": "583996e86b658852bc27ffd0"
+    },
+    "Zip": "01001",
+    "Name": "AGAWAM",
+    "Location": [
+        "-72.622739",
+        "42.070206"
+    ],
+    "Population": 15338,
+    "State": "MA"
+}
+~~~~
+
+
 ###### Technical informations
 
 The underlying connection will be handled at first using the .NET driver for MongoDB :
@@ -12,4 +54,4 @@ The underlying connection will be handled at first using the .NET driver for Mon
 * Nuget Package : https://www.nuget.org/packages/MongoDB.Driver/
 * Github : https://github.com/mongodb/mongo-csharp-driver
 
-Using MongoDB.Driver.Core may be a better way of doing things, I'll check it later.
+Using a low-level driver may be a better way of doing things, I'll check it later.

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace SPR.EntityFrameworkCore.MongoDb.TestApp
 {
@@ -12,36 +9,33 @@ namespace SPR.EntityFrameworkCore.MongoDb.TestApp
         {
             try
             {
-                using (var context = new DummyDbContext())
+
+
+
+                using (var context = new MongoDbContext())
                 {
-                    var conventionSetBuilder = context.GetService<Microsoft.EntityFrameworkCore.Metadata.Conventions.Internal.ICoreConventionSetBuilder>();
-                    Console.WriteLine("ICoreConventionSetBuilder : " + conventionSetBuilder.GetType().FullName);
+                    Console.WriteLine("Tentative de chargement des données de la collection Customer");
 
-                    Console.WriteLine("DummyDbContext created");
+                    var data = context.Customers.ToList();
 
-                    var entity = new Customer()
+                    foreach (var customer in data)
                     {
-                        FirstName = "Sebastien",
-                        LastName = "Putier",
-                        //Address = new Address
-                        //{
-                        //    Address1 = "1ere ligne d'adresse",
-                        //    Address2 = "2eme ligne d'adresse",
-                        //    ZipCode = "01023",
-                        //    City = "Une ville",
-                        //    Country = "France"
-                        //},
-                        PhoneNumber = "0601020304"
-                    };
-
-                    Console.WriteLine("Entity created");
-
-                    context.Add(entity);
-                    Console.WriteLine("Entity added");
-
-                    context.SaveChanges();
-                    Console.WriteLine("Entity saved");
+                        Console.WriteLine($"Id : {customer.Id} - Client : {customer.FirstName} {customer.LastName} - Tel : {customer.PhoneNumber}");
+                    }
                 }
+
+                using (var context = new MongoDbContext())
+                {
+                    Console.WriteLine("Tentative de chargement des données de la collection City");
+
+                    var cities = context.Cities.Select(c => new { c.Name, c.Id, c.Zip }).ToList();
+
+                    foreach (var ville in cities)
+                    {
+                        Console.WriteLine($"Id : {ville.Id} - Nom : {ville.Name} - Zip : {ville.Zip}");
+                    }
+                }
+
             }
             catch (Exception ex)
             {
@@ -56,3 +50,4 @@ namespace SPR.EntityFrameworkCore.MongoDb.TestApp
         }
     }
 }
+

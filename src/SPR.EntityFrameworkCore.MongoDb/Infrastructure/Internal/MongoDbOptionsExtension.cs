@@ -1,18 +1,40 @@
-﻿using Microsoft.EntityFrameworkCore.Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
+﻿using JetBrains.Annotations;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Utilities;
-using JetBrains.Annotations;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Linq;
 
 namespace SPR.EntityFrameworkCore.MongoDb.Infrastructure.Internal
 {
     public class MongoDbOptionsExtension : IDbContextOptionsExtension
     {
-        public string ConnectionString { get; set; }
+        private string _connectionString;
+        private string _databaseName;
+
+        public virtual string ConnectionString
+        {
+            get { return _connectionString; }
+            [param: NotNull]
+            set
+            {
+                Check.NotEmpty(value, nameof(value));
+
+                _connectionString = value;
+            }
+        }
+
+        public string DatabaseName
+        {
+            get { return _databaseName; }
+            [param: NotNull]
+            set
+            {
+                Check.NotEmpty(value, nameof(value));
+
+                _databaseName = value;
+            }
+        }
 
         public MongoDbOptionsExtension()
         {
@@ -22,7 +44,8 @@ namespace SPR.EntityFrameworkCore.MongoDb.Infrastructure.Internal
         {
             Check.NotNull(copyFrom, nameof(copyFrom));
 
-            this.ConnectionString = copyFrom.ConnectionString;
+            _connectionString = copyFrom.ConnectionString;
+            _databaseName = copyFrom.DatabaseName;
         }
 
         public void ApplyServices([NotNull] IServiceCollection services)
@@ -30,6 +53,28 @@ namespace SPR.EntityFrameworkCore.MongoDb.Infrastructure.Internal
             Check.NotNull(services, nameof(services));
 
             services.AddEntityFrameworkMongoDb();
+        }
+
+        public static MongoDbOptionsExtension Extract([NotNull] IDbContextOptions options)
+        {
+            Check.NotNull(options, nameof(options));
+
+            var mongoDbOptionsExtension
+                = options.Extensions
+                    .OfType<MongoDbOptionsExtension>()
+                    .ToArray();
+
+            if (mongoDbOptionsExtension.Length == 0)
+            {
+                throw new InvalidOperationException("No MongoDB database providers are configured.");
+            }
+
+            if (mongoDbOptionsExtension.Length > 1)
+            {
+                throw new InvalidOperationException("Multiple MongoDB database provider configurations found. A context can only be configured to use a single database provider.");
+            }
+
+            return mongoDbOptionsExtension[0];
         }
     }
 }

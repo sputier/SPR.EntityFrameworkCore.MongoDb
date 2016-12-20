@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // Les informations générales relatives à un assembly dépendent de 
 // l'ensemble d'attributs suivant. Changez les valeurs de ces attributs pour modifier les informations
 // associées à un assembly.
-[assembly: AssemblyTitle("SPR.EntityFrameworkCore.MongoDb")]
+[assembly: AssemblyTitle("EntityFramework.MongoDb")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SPR.EntityFrameworkCore.MongoDb")]
+[assembly: AssemblyProduct("EntityFramework.MongoDb")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Le GUID suivant est pour l'ID de la typelib si ce projet est exposé à COM
-[assembly: Guid("48c1c92a-a060-49d1-9831-cdd834090904")]
+[assembly: Guid("8f8dc9a5-b266-4b08-b4eb-789dff4df30f")]
 
 // Les informations de version pour un assembly se composent des quatre valeurs suivantes :
 //

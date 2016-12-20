@@ -1,20 +1,22 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using JetBrains.Annotations;
+using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore.Update;
+using Microsoft.EntityFrameworkCore.Utilities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Update;
 using System.Threading;
-using JetBrains.Annotations;
-using Microsoft.EntityFrameworkCore.Query;
+using System.Threading.Tasks;
 
 namespace SPR.EntityFrameworkCore.MongoDb.Storage
 {
     public class MongoDbDatabase : Database
     {
-        public MongoDbDatabase([NotNull] IQueryCompilationContextFactory queryCompilationContextFactory) 
-            : base(queryCompilationContextFactory)
+        public MongoDbDatabase(
+            [NotNull] IQueryCompilationContextFactory queryCompilationContextFactory)
+            : base(
+                    Check.NotNull(queryCompilationContextFactory,
+                                nameof(queryCompilationContextFactory)))
         {
         }
 

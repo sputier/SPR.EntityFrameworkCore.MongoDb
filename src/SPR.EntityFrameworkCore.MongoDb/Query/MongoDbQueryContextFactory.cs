@@ -1,27 +1,33 @@
-﻿using Microsoft.EntityFrameworkCore.Query;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using JetBrains.Annotations;
-using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
+﻿using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.EntityFrameworkCore.Utilities;
+using SPR.EntityFrameworkCore.MongoDb.Storage.Internal;
 
 namespace SPR.EntityFrameworkCore.MongoDb.Query
 {
     public class MongoDbQueryContextFactory : QueryContextFactory
-    {
-        public MongoDbQueryContextFactory([NotNull] IStateManager stateManager, 
-                                          [NotNull] IConcurrencyDetector concurrencyDetector, 
-                                          [NotNull] IChangeDetector changeDetector) 
-            : base(stateManager, concurrencyDetector, changeDetector)
-        {
-        }
+{
+    private readonly IMongoDbConnection _connection;
 
-        public override QueryContext Create()
-        {
-            throw new NotImplementedException();
-        }
+    public MongoDbQueryContextFactory(
+        [NotNull] ICurrentDbContext currentContext,
+        [NotNull] IConcurrencyDetector concurrencyDetector,
+        [NotNull] IMongoDbConnection connection)
+        : base(
+              Check.NotNull(currentContext, nameof(currentContext)),
+              Check.NotNull(concurrencyDetector, nameof(concurrencyDetector)))
+    {
+        Check.NotNull(connection, nameof(connection));
+
+        _connection = connection;
     }
+
+    public override QueryContext Create()
+        => new MongoDbQueryContext(
+            CreateQueryBuffer, 
+            StateManager, 
+            ConcurrencyDetector, 
+            _connection);
+}
 }

@@ -2,6 +2,7 @@
 
 namespace SPR.EntityFrameworkCore.MongoDb.Attributes
 {
+    [AttributeUsage(AttributeTargets.Property)]
     public class FieldAttribute : Attribute
     {
         public FieldAttribute(string name)

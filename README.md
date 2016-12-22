@@ -11,9 +11,9 @@ On the other hand, if anyone want to provide help, I'd be glad to receive it.
 
 At the moment, the provider can handle very simple Find queries, without any filter or projection. In the SQL world, we'd say it can handle SELECT * FROM table queries. 
 
-The test application execute 2 Find queries and display their results in the console. 
+The test application execute 3 Find queries and display their results in the console. 
 
-The sample database used to test the provider contains 2 collections : 
+The sample database used to test the provider contains 3 collections : 
 
 **Customer** :
 One document described below.
@@ -48,6 +48,30 @@ The first one is described below :
 }
 ~~~~
 
+**Persons** :
+2 documents described below : 
+~~~~
+{
+    "_id": {
+        "$oid": "583407e7f36d28568d3171eb"
+    },
+    "FirstName": "Jean",
+    "LastName": "Dupont",
+    "PhoneNumber": "0102030405"
+},
+{
+    "_id": {
+        "$oid": "585c4f09734d1d400d12898a"
+    },
+    "FirstName": "Michel",
+    "LastName": "Martin",
+    "PhoneNumber": "0504030201"
+}
+~~~~
+
+###### Usage informations
+At the moment, two Data Annotations have been implemented : [Field(name)] and [Collection(name)].
+They are used to configure the field name relative to a property and the collection name relative to an entity type.
 
 ###### Technical informations
 

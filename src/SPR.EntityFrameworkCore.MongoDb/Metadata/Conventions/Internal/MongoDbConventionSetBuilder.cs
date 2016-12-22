@@ -11,6 +11,9 @@ namespace SPR.EntityFrameworkCore.MongoDb.Metadata.Conventions.Internal
             conventionSet.PropertyAddedConventions.Add(fieldAttributeConvention);
             conventionSet.PropertyFieldChangedConventions.Add(fieldAttributeConvention);
 
+            var collectionAttributeConvention = new MongoDbCollectionAttributeConvention();
+            conventionSet.EntityTypeAddedConventions.Add(collectionAttributeConvention);
+
             return conventionSet;
         }
 

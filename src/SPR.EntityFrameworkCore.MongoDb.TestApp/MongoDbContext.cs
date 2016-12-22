@@ -16,6 +16,8 @@ namespace SPR.EntityFrameworkCore.MongoDb.TestApp
         public DbSet<Customer> Customers { get; set; }
 
         public DbSet<City> Cities { get; set; }
+
+        public DbSet<Person> Persons { get; set; }
     }
 
     public class City
@@ -45,16 +47,17 @@ namespace SPR.EntityFrameworkCore.MongoDb.TestApp
         public string PhoneNumber { get; set; }
     }
 
-    public struct Address
+    [Collection("Persons")]
+    public class Person
     {
-        public string Address1 { get; set; }
+        [Field("_id")]
+        public string Id { get; set; }
 
-        public string Address2 { get; set; }
+        public string FirstName { get; set; }
 
-        public string ZipCode { get; set; }
+        public string LastName { get; set; }
 
-        public string City { get; set; }
-
-        public string Country { get; set; }
+        public string PhoneNumber { get; set; }
     }
+
 }

@@ -175,6 +175,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\CollectionAttribute.cs" />
     <Compile Include="Attributes\FieldAttribute.cs" />
     <Compile Include="Bson\BsonQueryGenerator.cs" />
     <Compile Include="Bson\BsonQueryGeneratorFactory.cs" />
@@ -183,6 +184,7 @@
     <Compile Include="Infrastructure\Internal\MongoDbOptionsExtension.cs" />
     <Compile Include="Infrastructure\MongoDbModelSource.cs" />
     <Compile Include="Infrastructure\MongoDbServiceCollectionExtensions.cs" />
+    <Compile Include="Metadata\Conventions\Internal\MongoDbCollectionAttributeConvention.cs" />
     <Compile Include="Metadata\Conventions\Internal\MongoDbConventionSetBuilder.cs" />
     <Compile Include="Metadata\Conventions\Internal\MongoDbFieldAttributeConvention.cs" />
     <Compile Include="Metadata\IMongoDbAnnotationsProvider.cs" />
@@ -194,6 +196,7 @@
     <Compile Include="Metadata\Internal\MongoDbAnnotationsNames.cs" />
     <Compile Include="Metadata\Internal\MongoDbFullAnnotationsNames.cs" />
     <Compile Include="Metadata\Internal\MongoDbInternalMetadataBuilderExtensions.cs" />
+    <Compile Include="Metadata\Internal\MongoDbEntityTypeBuilderAnnotations.cs" />
     <Compile Include="Metadata\Internal\MongoDbPropertyBuilderAnnotations.cs" />
     <Compile Include="Metadata\MongoDbAnnotations.cs" />
     <Compile Include="Metadata\MongoDbAnnotationsProvider.cs" />

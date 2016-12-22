@@ -14,21 +14,28 @@ namespace SPR.EntityFrameworkCore.MongoDb.Metadata
         public MongoDbEntityTypeAnnotations(
             [NotNull] IEntityType entityType,
             [CanBeNull] MongoDbFullAnnotationsNames fullAnnotationNames)
+            : this(new MongoDbAnnotations(entityType), fullAnnotationNames)
         {
-            Annotations = new MongoDbAnnotations(entityType);
+        }
+
+        protected MongoDbEntityTypeAnnotations(
+            [NotNull] MongoDbAnnotations annotations,
+            [CanBeNull] MongoDbFullAnnotationsNames fullAnnotationNames)
+        {
+            Annotations = annotations;
             FullAnnotationNames = fullAnnotationNames;
         }
 
-        private MongoDbAnnotations Annotations { get; }
-        private IEntityType EntityType => (IEntityType)Annotations.Metadata;
+        protected MongoDbAnnotations Annotations { get; }
+        protected IEntityType EntityType => (IEntityType)Annotations.Metadata;
 
-        private MongoDbModelAnnotations GetAnnotations([NotNull] IModel model)
+        protected MongoDbModelAnnotations GetAnnotations([NotNull] IModel model)
             => new MongoDbModelAnnotations(model, FullAnnotationNames);
 
-        private MongoDbEntityTypeAnnotations GetAnnotations([NotNull] IEntityType entityType)
+        protected MongoDbEntityTypeAnnotations GetAnnotations([NotNull] IEntityType entityType)
              => new MongoDbEntityTypeAnnotations(entityType, FullAnnotationNames);
 
-        public string CollectionName
+        public virtual string CollectionName
         {
             get
             {
@@ -46,7 +53,7 @@ namespace SPR.EntityFrameworkCore.MongoDb.Metadata
             set { SetCollectionName(value); }
         }
 
-        private bool SetCollectionName([CanBeNull] string value)
+        protected bool SetCollectionName([CanBeNull] string value)
             => Annotations.SetAnnotation(
                 MongoDbFullAnnotationsNames.Instance.CollectionName,
                 Check.NullButNotEmpty(value, nameof(value)));

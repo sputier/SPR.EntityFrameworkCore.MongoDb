@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Utilities;
 using Microsoft.Extensions.Logging;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using SPR.EntityFrameworkCore.MongoDb.Infrastructure.Internal;
 using System;
@@ -64,10 +65,19 @@ namespace SPR.EntityFrameworkCore.MongoDb.Storage.Internal
 
         public IEnumerable<MongoDB.Bson.BsonDocument> ExecuteQuery(string collectionName, string projection)
         {
-            return _internalMongoDatabase.GetCollection<object>(collectionName)
-                                              .Find("{}")
-                                              .Project(projection)
-                                              .ToList();
+            if (!CollectionExists(collectionName))
+                throw new Exception($"The collection {collectionName} doesn't exist.");
+
+            return _internalMongoDatabase.GetCollection<object>(collectionName).Find("{}")
+                                                                               .Project(projection)
+                                                                               .ToList();
+        }
+
+        private bool CollectionExists(string collectionName)
+        {
+            var filter = new BsonDocument("name", collectionName);
+            var collections = _internalMongoDatabase.ListCollections(new ListCollectionsOptions { Filter =  filter });
+            return collections.Any();
         }
     }
 }

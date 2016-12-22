@@ -10,7 +10,19 @@ namespace SPR.EntityFrameworkCore.MongoDb.TestApp
             try
             {
 
+                using (var context = new MongoDbContext())
+                {
+                    Console.WriteLine("Tentative de chargement des données de la collection Persons");
 
+                    var data = context.Persons.ToList();
+
+                    foreach (var person in data)
+                    {
+                        Console.WriteLine($"Id : {person.Id} - Client : {person.FirstName} {person.LastName} - Tel : {person.PhoneNumber}");
+                    }
+                }
+
+                Console.ReadLine();
 
                 using (var context = new MongoDbContext())
                 {
